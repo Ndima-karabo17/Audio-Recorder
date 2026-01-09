@@ -5,13 +5,20 @@ import { useState } from "react";
 import Playback from "./Playback";
 
 export default function Index() {
+  
 const [savedRecordings, setSavedRecordings] = useState<Recording[]>([]);
+
+const handleDelete = (id: string) => {
+    setSavedRecordings((prev) => prev.filter((rec) => rec.id !== id));
+  };
 
   return (
     <View style={styles.container}>
       <Text>You voice note</Text>
-      <DisplayRecording recordings={savedRecordings}/>
-      <Playback uri={savedRecordings.length > 0 ? savedRecordings[0].uri : null}></Playback>
+<DisplayRecording 
+        recordings={savedRecordings} 
+        onDelete={handleDelete} 
+      />      <Playback uri={savedRecordings.length > 0 ? savedRecordings[0].uri : null}></Playback>
       <CreateRecording onSave={(newRec) => setSavedRecordings([newRec, ...savedRecordings])} />
     
 
