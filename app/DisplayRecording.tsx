@@ -2,14 +2,12 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native
 import { Ionicons } from '@expo/vector-icons';
 import { useAudioPlayer } from 'expo-audio';
 
-
 export interface Recording {
   id: string;
   uri: string;
   timestamp: string;
   date: string;
 }
-
 
 interface DisplayRecordingProps {
   recordings: Recording[];
@@ -19,9 +17,18 @@ interface DisplayRecordingProps {
 export default function DisplayRecording({ recordings, onDelete }: DisplayRecordingProps) {
   const player = useAudioPlayer();
 
-  const handlePlay = (uri: string) => {
-    player.replace(uri);
-    player.play();
+  const handleTogglePlay = (uri: string) => {
+    const playerUri = (player as any).src || (player as any).source?.uri || (player as any).source;
+    const isCurrentFile = playerUri === uri;
+
+    if (isCurrentFile && player.playing) {
+      player.pause();
+    } else if (isCurrentFile && !player.playing) {
+      player.play();
+    } else {
+      player.replace(uri);
+      player.play();
+    }
   };
 
   return (
@@ -30,31 +37,39 @@ export default function DisplayRecording({ recordings, onDelete }: DisplayRecord
         data={recordings}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <View style={styles.textContainer}>
-              <Text style={styles.dateText}>{item.date}</Text>
-              <Text style={styles.timeText}>{item.timestamp}</Text>
-            </View>
-            
-            <TouchableOpacity 
-              style={styles.playButton} 
-              onPress={() => handlePlay(item.uri)}
-            >
-              <Ionicons name="play" size={30} color="black" />
-            </TouchableOpacity>
+        renderItem={({ item }) => {
+          const playerUri = (player as any).src || (player as any).source?.uri || (player as any).source;
+          const isPlayingThis = player.playing && playerUri === item.uri;
 
-            
-            {onDelete && (
+          return (
+            <View style={styles.card}>
+              <View style={styles.textContainer}>
+                <Text style={styles.dateText}>{item.date}</Text>
+                <Text style={styles.timeText}>{item.timestamp}</Text>
+              </View>
+
               <TouchableOpacity 
-                style={styles.stopButton} 
-                onPress={() => onDelete(item.id)} 
+                style={styles.playButton} 
+                onPress={() => handleTogglePlay(item.uri)}
               >
-                <Ionicons name="trash" size={24} color="white" />
+                <Ionicons 
+                  name={isPlayingThis ? "pause" : "play"} 
+                  size={30} 
+                  color="black" 
+                />
               </TouchableOpacity>
-            )}
-          </View>
-        )}
+
+              {onDelete && (
+                <TouchableOpacity 
+                  style={styles.stopButton} 
+                  onPress={() => onDelete(item.id)} 
+                >
+                  <Ionicons name="trash" size={24} color="white" />
+                </TouchableOpacity>
+              )}
+            </View>
+          );
+        }}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="musical-notes-outline" size={48} color="#f3e9e9ff" />
@@ -68,7 +83,7 @@ export default function DisplayRecording({ recordings, onDelete }: DisplayRecord
 
 const styles = StyleSheet.create({
   container: {
-   marginBottom: 50
+    marginBottom: 50
   },
   listContent: {
     paddingBottom: 10,
@@ -82,9 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    
     elevation: 2,
-    
   },
   textContainer: {
     flex: 1,
@@ -101,26 +114,20 @@ const styles = StyleSheet.create({
   },
   playButton: {
     backgroundColor: '#FF8C00', 
-    flexDirection: 'row',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
   },
-  stopButton:{
-backgroundColor: 'red',
-    width: 55,
-    height: 55,
-    borderRadius: 28,
+  stopButton: {
+    backgroundColor: 'red',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
-  },
-  playText: {
-    color: 'white',
-    fontWeight: 'bold',
-    marginLeft: 4,
-    fontSize: 14,
   },
   emptyContainer: {
     alignItems: 'center',
