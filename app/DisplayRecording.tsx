@@ -13,14 +13,14 @@ export interface Recording {
 
 interface DisplayRecordingProps {
   recordings: Recording[];
+  onDelete?: (id: string) => void;
 }
 
-export default function DisplayRecording({ recordings }: DisplayRecordingProps) {
-  
-const player = useAudioPlayer();
+export default function DisplayRecording({ recordings, onDelete }: DisplayRecordingProps) {
+  const player = useAudioPlayer();
 
   const handlePlay = (uri: string) => {
-    player.replace(uri); 
+    player.replace(uri);
     player.play();
   };
 
@@ -36,7 +36,7 @@ const player = useAudioPlayer();
               <Text style={styles.dateText}>{item.date}</Text>
               <Text style={styles.timeText}>{item.timestamp}</Text>
             </View>
-
+            
             <TouchableOpacity 
               style={styles.playButton} 
               onPress={() => handlePlay(item.uri)}
@@ -44,13 +44,15 @@ const player = useAudioPlayer();
               <Ionicons name="play" size={30} color="black" />
             </TouchableOpacity>
 
-
-            <TouchableOpacity 
-              style={styles.stopButton} 
-              onPress={() => handlePlay(item.uri)}
-            >
-              <Ionicons name="trash" size={24} color="black" />
-            </TouchableOpacity>
+            
+            {onDelete && (
+              <TouchableOpacity 
+                style={styles.stopButton} 
+                onPress={() => onDelete(item.id)} 
+              >
+                <Ionicons name="trash" size={24} color="white" />
+              </TouchableOpacity>
+            )}
           </View>
         )}
         ListEmptyComponent={
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#2a2829',
     marginHorizontal: 16,
     marginTop: 12,
     padding: 16,
@@ -90,11 +92,11 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: '#ece1e1ff',
   },
   timeText: {
     fontSize: 13,
-    color: '#070707ff',
+    color: '#fcf6f6ff',
     marginTop: 2,
   },
   playButton: {
