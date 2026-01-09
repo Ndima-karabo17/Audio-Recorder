@@ -1,6 +1,7 @@
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useAudioPlayer } from "expo-audio";
 import { Ionicons } from '@expo/vector-icons';
+import { useEffect } from 'react';
 
 interface PlaybackProps {
   uri: string | null;
@@ -8,6 +9,12 @@ interface PlaybackProps {
 
 export default function Playback({ uri }: PlaybackProps) {
   const player = useAudioPlayer(uri);
+
+  useEffect(() => {
+    if (uri) {
+      player.replace(uri);
+    }
+  }, [uri]);
 
   if (!uri) return null; 
 
@@ -24,7 +31,6 @@ export default function Playback({ uri }: PlaybackProps) {
       <Text style={styles.label}>Last Recording</Text>
       
       <View style={styles.controls}>
-       
         <TouchableOpacity style={styles.iconButton} onPress={handleTogglePlay}>
           <Ionicons 
             name={player.playing ? "pause" : "play"} 
@@ -33,12 +39,14 @@ export default function Playback({ uri }: PlaybackProps) {
           />
         </TouchableOpacity>
 
-    
         <TouchableOpacity 
           style={[styles.iconButton, styles.secondaryButton]} 
-          onPress={() => { player.seekTo(0); player.play(); }}
+          onPress={() => { 
+            player.seekTo(0); 
+            player.play(); 
+          }}
         >
-          <Ionicons name="trash" size={24} color="#e98e20ff" />
+          <Ionicons name="refresh" size={24} color="#FF8C00" />
         </TouchableOpacity>
       </View>
     </View>
