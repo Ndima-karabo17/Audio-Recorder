@@ -39,7 +39,7 @@ export default function CreateRecording({ onSave }: Props) {
         style={[styles.button, recorderState.isRecording && styles.buttonRecording]} 
         onPress={recorderState.isRecording ? stopRecording : record}
       >
-        <Ionicons name={recorderState.isRecording ? "stop" : "mic"} size={32} color="black" />
+        <Ionicons name={recorderState.isRecording ? "paper-plane" : "mic"} size={32} color="black" />
       </TouchableOpacity>
     </View>
   );
