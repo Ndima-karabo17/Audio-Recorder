@@ -1,50 +1,44 @@
-# Welcome to your Expo app 👋
+# React Native Audio Recorder
+A sleek, functional digital journal for voice notes. This application allows users to record, manage, and play back audio recordings directly on their mobile devices. Built as part of the React Native Lesson 5 curriculum.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Features
+High-Quality Recording: Capture audio notes using the device microphone.
 
-## Get started
+Persistent Storage: Audio files are saved to the device's file system and remain available after app restarts.
 
-1. Install dependencies
+Full Playback Control: Play, pause, and seek through recordings with real-time duration tracking.
 
-   ```bash
-   npm install
-   ```
+CRUD Operations:
 
-2. Start the app
+Create: Record new snippets.
 
-   ```bash
-   npx expo start
-   ```
+Read: View a list of recordings with timestamps.
 
-In the output, you'll find options to open the app in a
+Update: Rename voice notes for better organization.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Delete: Remove unwanted recordings to save space.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Search: Instantly find specific notes by name using the search bar.
 
-## Get a fresh project
+Offline Access: Full functionality without an internet connection.
 
-When you're ready, run:
+Tech Stack
+Framework: React Native
 
-```bash
-npm run reset-project
-```
+Audio Engine: expo-av or react-native-audio-recorder-player
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+File Management: expo-file-system (or equivalent)
 
-## Learn more
+Storage: AsyncStorage for metadata persistence.
 
-To learn more about developing your project with Expo, look at the following resources:
+Icons: Lucide-react or Vector Icons.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+How to Run the Project
+Follow these steps to get the development environment running on your local machine.
 
-## Join the community
+1. Prerequisites
+Node.js (v18 or newer recommended)
 
-Join our community of developers creating universal apps.
+npm or yarn
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Expo Go app installed on your physical device (recommended for audio testing) OR an Emulator (Android Studio/Xcode).
