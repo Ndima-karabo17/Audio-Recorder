@@ -50,6 +50,9 @@ Expo Go app installed on your physical device (recommended for audio testing) OR
 2. Steps to run the project
 
 i) Clone repository (https://github.com/Ndima-karabo17/Audio-Recorder.git)
+
 ii) cd Audio-Recorder or make sure you are inside Audio-Recorder in your terminal
+
 iii) npm install
+
 iv) npx expo start then scan the QR code using your Expo go app in your android phone
