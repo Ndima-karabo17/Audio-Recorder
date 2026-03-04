@@ -1,7 +1,7 @@
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useAudioPlayer } from "expo-audio";
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 interface PlaybackProps {
   uri: string | null;
@@ -14,7 +14,7 @@ export default function Playback({ uri }: PlaybackProps) {
     if (uri) {
       player.replace(uri);
     }
-  }, [uri]);
+  });
 
   if (!uri) return null; 
 
