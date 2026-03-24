@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRecorder } from "../hooks/useRecorder";
+import { useAuth } from "../context/AuthContext";
 import { Recording } from "../types/recording";
 import { formatDuration } from "../utils/format";
+import AuthModal from "./AuthModal";
 
 interface Props {
   onSave: (recording: Recording) => void;
 }
 
 export default function CreateRecording({ onSave }: Props) {
+  const { user } = useAuth();
   const { isRecording, elapsedMs, startRecording, stopRecording } = useRecorder();
+  const [authModalVisible, setAuthModalVisible] = useState(false);
 
   const handlePress = async () => {
+    // Guard: require sign-in before recording
+    if (!user) {
+      setAuthModalVisible(true);
+      return;
+    }
+
     if (isRecording) {
       const saved = await stopRecording();
       if (saved) onSave(saved);
@@ -22,21 +32,28 @@ export default function CreateRecording({ onSave }: Props) {
   };
 
   return (
-    <View style={styles.footer}>
-      {isRecording && (
-        <View style={styles.timerBadge}>
-          <View style={styles.pulseDot} />
-          <Text style={styles.timerText}>{formatDuration(elapsedMs)}</Text>
-        </View>
-      )}
-      <TouchableOpacity
-        style={[styles.button, isRecording && styles.buttonRecording]}
-        onPress={handlePress}
-        activeOpacity={0.8}
-      >
-        <Ionicons name={isRecording ? "stop" : "mic"} size={30} color="white" />
-      </TouchableOpacity>
-    </View>
+    <>
+      <View style={styles.footer}>
+        {isRecording && (
+          <View style={styles.timerBadge}>
+            <View style={styles.pulseDot} />
+            <Text style={styles.timerText}>{formatDuration(elapsedMs)}</Text>
+          </View>
+        )}
+        <TouchableOpacity
+          style={[styles.button, isRecording && styles.buttonRecording]}
+          onPress={handlePress}
+          activeOpacity={0.8}
+        >
+          <Ionicons name={isRecording ? "stop" : "mic"} size={30} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      <AuthModal
+        visible={authModalVisible}
+        onDismiss={() => setAuthModalVisible(false)}
+      />
+    </>
   );
 }
 
